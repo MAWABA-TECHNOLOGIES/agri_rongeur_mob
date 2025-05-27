@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1015931904993",
+    "project_id": "agri-rongeur",
+    "storage_bucket": "agri-rongeur.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1015931904993:android:9944d0ff3dea84d56e68a0",
+        "android_client_info": {
+          "package_name": "com.example.agri_rongeur_mob"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0B3mMX6KqILnERPtylro9g-X8VFpY_uk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
