@@ -1,3 +1,4 @@
+import 'package:agri_rongeur_mob/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class ResultScreen extends StatelessWidget {
@@ -7,10 +8,8 @@ class ResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String name = result['name'] ?? 'Inconnu';
-    final String description =
-        result['description'] ?? 'Aucune description disponible.';
-    final String? imageUrl = result['image_url']; // Peut être null
+    final String? imageUrl = result['image_url'];
+    final List<dynamic> predictions = result['result'] ?? [];
 
     return Scaffold(
       appBar: AppBar(title: const Text('Résultat')),
@@ -19,24 +18,36 @@ class ResultScreen extends StatelessWidget {
         child: Column(
           children: [
             if (imageUrl != null)
-              Image.network(imageUrl, height: 200, fit: BoxFit.cover),
+              Image.network(
+                "${AppConstants.serverBaseUrl}$imageUrl",
+                height: 200,
+                fit: BoxFit.contain,
+              ),
             const SizedBox(height: 20),
-            Text(
-              name,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
+            const Text(
+              'Rongeur(s) détecté(s) :',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-            Text(
-              description,
-              style: const TextStyle(fontSize: 16),
-              textAlign: TextAlign.justify,
+            Expanded(
+              child: predictions.isEmpty
+                  ? const Text('Aucun objet détecté.')
+                  : ListView.builder(
+                itemCount: predictions.length,
+                itemBuilder: (context, index) {
+                  final item = predictions[index];
+                  return Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.bug_report),
+                      title: Text(item['class_name']),
+                      subtitle: Text(
+                        'Confiance : ${(item['confidence'] * 100).toStringAsFixed(1)}%'
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
-            const Spacer(),
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Retour'),
-            )
           ],
         ),
       ),

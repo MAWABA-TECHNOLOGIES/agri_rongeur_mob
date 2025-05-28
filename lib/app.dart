@@ -1,3 +1,4 @@
+import 'package:agri_rongeur_mob/themes/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'screens/auth/login_screen.dart';
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'AgriRongeurs',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark(), // ou clair selon ta maquette
+      theme: AppTheme.lightTheme,
       home: const AuthGate(),
     );
   }
@@ -27,7 +28,14 @@ class AuthGate extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
-              body: Center(child: CircularProgressIndicator()));
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Center(child: CircularProgressIndicator()),
+                ],
+              ),
+          );
         } else if (snapshot.hasData) {
           return const HomeScreen(); // vers la page principale avec bottom nav
         } else {

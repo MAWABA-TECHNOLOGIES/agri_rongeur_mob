@@ -27,6 +27,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pages[_selectedIndex],
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () => _onItemTapped(0),
+      //   child: const Icon(Icons.camera_alt),
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,

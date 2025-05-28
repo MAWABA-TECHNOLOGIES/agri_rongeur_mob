@@ -61,29 +61,33 @@ class ProfileScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('Profil')),
       body: Padding(
         padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            const SizedBox(height: 40),
-            const Icon(Icons.person, size: 100),
-            const SizedBox(height: 20),
-            Text(
-              user?.email ?? 'Utilisateur inconnu',
-              style: const TextStyle(fontSize: 20),
-            ),
-            const Spacer(),
-            ElevatedButton.icon(
-              icon: const Icon(Icons.logout),
-              onPressed: () => _signOut(context),
-              label: const Text('Se déconnecter'),
-            ),
-            const SizedBox(height: 10),
-            TextButton.icon(
-              icon: const Icon(Icons.delete_forever, color: Colors.red),
-              onPressed: () => _deleteAccount(context),
-              label: const Text('Supprimer le compte',
-                  style: TextStyle(color: Colors.red)),
-            ),
-          ],
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 40),
+              const Icon(Icons.person, size: 100),
+              const SizedBox(height: 20),
+              Text(
+                user?.email ?? 'Utilisateur inconnu',
+                style: const TextStyle(fontSize: 20),
+              ),
+              const Spacer(),
+              const SizedBox(height: 30),
+              ElevatedButton.icon(
+                icon: const Icon(Icons.logout),
+                onPressed: () => _signOut(context),
+                label: const Text('Se déconnecter'),
+              ),
+              const SizedBox(height: 10),
+              TextButton.icon(
+                icon: const Icon(Icons.delete_forever, color: Colors.red),
+                onPressed: () => _deleteAccount(context),
+                label: const Text('Supprimer le compte',
+                    style: TextStyle(color: Colors.red)),
+              ),
+            ],
+          ),
         ),
       ),
     );

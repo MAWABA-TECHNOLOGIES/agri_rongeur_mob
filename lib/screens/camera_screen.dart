@@ -1,12 +1,12 @@
 import 'dart:io';
+import 'package:agri_rongeur_mob/services/api_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart' as path;
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 import 'result_screen.dart';
 
@@ -37,38 +37,34 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   Future<void> _analyzeImage() async {
-    if (_selectedImage == null) return;
+    if (_selectedImage == null && !kIsWeb) return;
 
     setState(() => _loading = true);
 
     try {
-      final imageUrl = await _uploadImage(_selectedImage!);
+      final res = kIsWeb ? await ApiService.detectImageWeb() :
+        await ApiService.detectImage(_selectedImage!);
 
-      final res = await http.post(
-        Uri.parse('https://your-fastapi-url/detect'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'image_url': imageUrl}),
-      );
-
-      final resultData = jsonDecode(res.body);
-
+      print("Prédictions : ${res['predictions']}");
+      print("Image annotée URL : ${res['image_url']}");
+      res['result'] = res['predictions'];
       await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser?.uid)
           .collection('history')
           .add({
-        'image_url': imageUrl,
-        'result': resultData,
+        ...res,
         'createdAt': FieldValue.serverTimestamp(),
       });
 
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => ResultScreen(result: resultData),
+          builder: (_) => ResultScreen(result: res),
         ),
       );
     } catch (e) {
+      print(e.toString());
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Erreur : ${e.toString()}')),
       );
@@ -87,20 +83,24 @@ class _CameraScreenState extends State<CameraScreen> {
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  if (_selectedImage != null)
+                  if (_selectedImage != null && !kIsWeb)
                     Image.file(_selectedImage!, height: 200),
+                  if (_selectedImage != null && kIsWeb)
+                    Image.network(_selectedImage!.path, height: 200),
                   const SizedBox(height: 20),
-                  ElevatedButton.icon(
-                    onPressed: () => _pickImage(ImageSource.camera),
-                    icon: const Icon(Icons.camera_alt),
-                    label: const Text("Prendre une photo"),
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: () => _pickImage(ImageSource.gallery),
-                    icon: const Icon(Icons.photo_library),
-                    label: const Text("Choisir depuis la galerie"),
-                  ),
-                  if (_selectedImage != null)
+                  if (_selectedImage == null && !kIsWeb)
+                    ElevatedButton.icon(
+                      onPressed: () => _pickImage(ImageSource.camera),
+                      icon: const Icon(Icons.camera_alt),
+                      label: const Text("Prendre une photo"),
+                    ),
+                  if (_selectedImage == null && !kIsWeb)
+                    ElevatedButton.icon(
+                      onPressed: () => _pickImage(ImageSource.gallery),
+                      icon: const Icon(Icons.photo_library),
+                      label: const Text("Choisir depuis la galerie"),
+                    ),
+                  if (_selectedImage != null || kIsWeb)
                     ElevatedButton(
                       onPressed: _analyzeImage,
                       child: const Text("Analyser l'image"),

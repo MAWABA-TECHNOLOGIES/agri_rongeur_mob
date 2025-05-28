@@ -54,17 +54,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
+            const SizedBox(height: 40),
+            const Icon(Icons.person, size: 100),
+            const SizedBox(height: 20),
             if (_error != null)
               Text(_error!, style: const TextStyle(color: Colors.red)),
             TextField(
               controller: _nameController,
               decoration: const InputDecoration(labelText: 'Nom'),
             ),
+            const SizedBox(height: 10),
             TextField(
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
               decoration: const InputDecoration(labelText: 'Email'),
             ),
+            const SizedBox(height: 10),
             TextField(
               controller: _passwordController,
               obscureText: true,

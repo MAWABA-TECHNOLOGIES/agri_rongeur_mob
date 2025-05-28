@@ -39,6 +39,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
+            const SizedBox(height: 40),
+            const Icon(Icons.lock, size: 100),
+            const SizedBox(height: 20),
             if (_message != null)
               Text(_message!,
                   style: TextStyle(

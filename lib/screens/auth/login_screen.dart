@@ -41,6 +41,9 @@ class _LoginScreenState extends State<LoginScreen> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
+            const SizedBox(height: 40),
+            const Icon(Icons.person, size: 100),
+            const SizedBox(height: 20),
             if (_error != null)
               Text(_error!, style: const TextStyle(color: Colors.red)),
             TextField(
@@ -48,6 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
               keyboardType: TextInputType.emailAddress,
               decoration: const InputDecoration(labelText: 'Email'),
             ),
+            const SizedBox(height: 10,),
             TextField(
               controller: _passwordController,
               obscureText: true,
