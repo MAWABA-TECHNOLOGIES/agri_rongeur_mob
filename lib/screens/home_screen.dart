@@ -1,3 +1,5 @@
+import 'package:agri_rongeur_mob/screens/dashboard_sreen.dart';
+import 'package:agri_rongeur_mob/themes/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'camera_screen.dart';
 import 'history_screen.dart';
@@ -14,6 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
+    const DashboardScreen(),
     const CameraScreen(),
     const HistoryScreen(),
     const ProfileScreen(),
@@ -27,15 +30,16 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pages[_selectedIndex],
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () => _onItemTapped(0),
-      //   child: const Icon(Icons.camera_alt),
-      // ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: AppTheme.lightTheme.bottomNavigationBarTheme.backgroundColor,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.dashboard),
+            label: 'Dashboard',
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.camera_alt),
             label: 'Photo',
