@@ -1,18 +1,37 @@
 import 'package:agri_rongeur_mob/utils/constants.dart';
 import 'package:flutter/material.dart';
 
-class ResultScreen extends StatelessWidget {
+class ResultScreen extends StatefulWidget {
   final Map<String, dynamic> result;
 
   const ResultScreen({super.key, required this.result});
 
   @override
+  State<ResultScreen> createState() => _ResultScreenState();
+}
+
+class _ResultScreenState extends State<ResultScreen> {
+  bool isTranslate = false;
+
+  @override
   Widget build(BuildContext context) {
-    final String? imageUrl = result['image_url'];
-    final List<dynamic> predictions = result['result'] ?? [];
+    final String? imageUrl = widget.result['image_url'];
+    final List<dynamic> predictions = filterUniquePredictions(widget.result['result'] ?? []);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Résultat')),
+      appBar: AppBar(
+        title: const Text('Résultat'),
+        actions: [
+          IconButton(
+            icon: isTranslate ? const Icon(Icons.settings_backup_restore) : const Icon(Icons.translate),
+            onPressed: () {
+              setState(() {
+                isTranslate = !isTranslate;
+              });
+            },
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -41,7 +60,9 @@ class ResultScreen extends StatelessWidget {
                       leading: const Icon(Icons.bug_report),
                       title: Text(item['class_name']),
                       subtitle: Text(
-                        'Confiance : ${(item['confidence'] * 100).toStringAsFixed(1)}%'
+                        isTranslate
+                            ? (item['translation'] ?? 'Traduction indisponible')
+                            : (item['description'] ?? 'Description indisponible'),
                       ),
                     ),
                   );
@@ -53,4 +74,14 @@ class ResultScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+List<dynamic> filterUniquePredictions (List<dynamic> predictions) {
+  final List<dynamic> uniquePredictions = [];
+  for (var item in predictions) {
+    if (!uniquePredictions.any((x) => x['class_name'] == item['class_name'])) {
+      uniquePredictions.add(item);
+    }
+  }
+  return uniquePredictions;
 }

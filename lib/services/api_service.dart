@@ -1,6 +1,7 @@
-import 'dart:convert';
+import 'dart:convert' as convert;
 import 'dart:io';
 import 'package:agri_rongeur_mob/utils/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 import 'dart:typed_data';
 import 'package:http_parser/http_parser.dart' as http_parser;
@@ -18,7 +19,7 @@ class ApiService {
     final response = await http.Response.fromStream(streamedResponse);
 
     if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+      return convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
     } else {
       throw Exception("Erreur détection : ${response.statusCode} - ${response.body}");
     }
@@ -55,7 +56,7 @@ class ApiService {
     final response = await http.Response.fromStream(streamedResponse);
 
     if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+      return convert.jsonDecode(convert.utf8.decode(response.bodyBytes));
     } else {
       throw Exception("Erreur détection : ${response.statusCode} - ${response.body}");
     }
