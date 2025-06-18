@@ -82,6 +82,7 @@ List<dynamic> filterUniquePredictions (List<dynamic> predictions) {
     if (!uniquePredictions.any((x) => x['class_name'] == item['class_name'])) {
       uniquePredictions.add(item);
     }
+
   }
   return uniquePredictions;
 }
