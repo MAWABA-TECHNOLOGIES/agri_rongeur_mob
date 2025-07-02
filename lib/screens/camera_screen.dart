@@ -5,8 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path/path.dart' as path;
 
 import 'result_screen.dart';
 
@@ -29,13 +27,6 @@ class _CameraScreenState extends State<CameraScreen> {
     }
   }
 
-  Future<String> _uploadImage(File file) async {
-    final fileName = path.basename(file.path);
-    final ref = FirebaseStorage.instance.ref().child('uploads/$fileName');
-    await ref.putFile(file);
-    return await ref.getDownloadURL();
-  }
-
   Future<void> _analyzeImage() async {
     if (_selectedImage == null && !kIsWeb) return;
 
@@ -45,8 +36,6 @@ class _CameraScreenState extends State<CameraScreen> {
       final res = kIsWeb ? await ApiService.detectImageWeb() :
         await ApiService.detectImage(_selectedImage!);
 
-      print("Prédictions : ${res['predictions']}");
-      print("Image annotée URL : ${res['image_url']}");
       res['result'] = res['predictions'];
       await FirebaseFirestore.instance
           .collection('users')

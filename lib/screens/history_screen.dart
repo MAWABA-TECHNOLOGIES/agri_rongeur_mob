@@ -75,6 +75,7 @@ class HistoryScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               final doc = docs[index];
               final data = doc.data() as Map<String, dynamic>;
+              data['id'] = doc.id;
               final result = data['result'] ?? [];
               final imageUrl = data['image_url'];
               // final name = result['name'] ?? 'Inconnu';
